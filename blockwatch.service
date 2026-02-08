@@ -1,5 +1,5 @@
 [Unit]
-Description=Miningcore Blockwatch (writes blockfound.txt + blockfound.log)
+Description=Miningcore Blockwatch (writes blockfound.txt, bf_log.txt, height.txt, poolblock.txt)
 After=network.target docker.service
 Wants=docker.service
 StartLimitIntervalSec=300
@@ -8,15 +8,12 @@ StartLimitBurst=5
 [Service]
 Type=simple
 User=umbrel
-Environment=MININGCORE_API=http://127.0.0.1:4000
-Environment=POOL_ID=dgb
-Environment=POLL_SEC=15
-ExecStart=/usr/bin/python3 -u /home/umbrel/umbrel/app-data/willitmod-dev-dgb/data/pool/config/walletguard/scripts/blockwatch.py
-Restart=on-failure
+WorkingDirectory=/home/umbrel/umbrel/app-data/NOC-Mining/scripts/blockwatch
+ExecStart=/usr/bin/python3 -u /home/umbrel/umbrel/app-data/NOC-Mining/scripts/blockwatch/blockwatch.py
+Restart=always
 RestartSec=10
 TimeoutStartSec=30
 
-# Stop cleanly (docker logs -f can hang otherwise)
 KillMode=control-group
 TimeoutStopSec=10
 KillSignal=SIGTERM
