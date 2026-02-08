@@ -98,7 +98,7 @@ def logwatch_miningcore():
                 height = int(m.group(1))
                 msg = f"MININGCORE HEARTBEAT ({PRIMARY_POOL_ID}): new network block {height}"
                 atomic_write(HEIGHT_STATUS_FILE, msg + "\n")
-                set_status(msg)
+                set_status("Blockwatch: running")
                 log_line(msg)
             continue
 
