@@ -1,0 +1,16 @@
+/home/umbrel/umbrel/app-data/NOC-Mining/www/blockwatch/*.txt
+/home/umbrel/umbrel/app-data/NOC-Mining/www/blockwatch/*.log
+/home/umbrel/umbrel/app-data/NOC-Mining/www/walletguard/*.txt
+/home/umbrel/umbrel/app-data/NOC-Mining/www/walletguard/*.log
+{
+    su umbrel umbrel
+    size 10M
+    rotate 5
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+    create 0644 umbrel umbrel
+    nodateext
+}
