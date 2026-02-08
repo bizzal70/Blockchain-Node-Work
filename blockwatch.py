@@ -74,6 +74,7 @@ def logwatch_miningcore():
 
     set_status("Blockwatch: running; waiting for Miningcore events...")
     atomic_write(HEIGHT_STATUS_FILE, "MININGCORE HEARTBEAT: waiting for next block...\n")
+    atomic_write(POOLBLOCK_STATUS_FILE, "POOL BLOCK: none yet\n")
 
     # Tail logs from "now" so we don't re-alert old wins after restarts
     cmd = ["docker", "logs", "-f", "--since", "0s", MININGCORE_CONTAINER]
