@@ -1,0 +1,12 @@
+/home/umbrel/umbrel/app-data/willitmod-dev-dgb/data/pool/config/walletguard/www/blockfound.log
+/home/umbrel/umbrel/app-data/willitmod-dev-dgb/data/pool/config/walletguard/www/hb_log.txt
+/home/umbrel/umbrel/app-data/willitmod-dev-dgb/data/pool/config/walletguard/www/bf_log.txt
+{
+    size 10M
+    rotate 5
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+}
