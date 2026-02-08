@@ -1,354 +1,160 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NOC Mining TV</title>
-  <style>
-    :root{
-      --bg:#0b0f14;
-      --card:#101824;
-      --card2:#0f1622;
-      --border:#1f2a3a;
-      --text:#e6edf3;
-      --muted:#9aa7b3;
-      --good:#2ea043;
-      --warn:#d29922;
-      --bad:#f85149;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-    * { box-sizing: border-box; }
-    body{
-      margin: 14px;
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-    }
-    header{
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:12px;
-    }
-    h1{
-      font-size: 28px;
-      margin:0;
-      letter-spacing: .4px;
-    }
-    .right{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .pill{
-      border:1px solid var(--border);
-      background: linear-gradient(180deg, var(--card), var(--card2));
-      border-radius:14px;
-      padding:10px 14px;
-      font-family: var(--mono);
-      font-size:16px;
-      white-space:nowrap;
-    }
-    .pill b{ font-weight:700; }
-    .status-dot{
-      display:inline-block;
-      width:10px; height:10px;
-      border-radius:50%;
-      margin-right:8px;
-      vertical-align:middle;
-      background: var(--muted);
-    }
-    .dot-good{ background: var(--good); }
-    .dot-warn{ background: var(--warn); }
-    .dot-bad{ background: var(--bad); }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NOC Mining Dashboard</title>
 
-    .layout{
-      display:grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 12px;
-    }
-
-    .card{
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, var(--card), var(--card2));
-      border-radius: 16px;
-      padding: 12px;
-      box-shadow: 0 8px 18px rgba(0,0,0,.25);
-      min-height: 0;
-    }
-    .card h2{
-      margin: 0 0 10px;
-      font-size: 16px;
-      color: var(--muted);
-      letter-spacing: .3px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-    }
-    .hint{
-      font-size: 12px;
-      color: var(--muted);
-      font-family: var(--mono);
-    }
-
-    pre{
-      margin:0;
-      padding: 12px;
-      border-radius: 14px;
-      background: rgba(0,0,0,.35);
-      border: 1px solid rgba(255,255,255,.06);
-      font-family: var(--mono);
-      font-size: 16px;      /* TV font */
-      line-height: 1.25;
-      height: 72vh;         /* big log windows */
-      overflow: auto;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .mini{
-      height: 22vh;
-      font-size: 16px;
-    }
-
-    .grid2{
-      display:grid;
-      grid-template-rows: 1fr 1fr;
-      gap: 12px;
-      height: calc(72vh + 22vh + 12px);
-    }
-
-    .banner{
-      display:none;
-      border:1px solid rgba(248,81,73,.5);
-      background: rgba(248,81,73,.12);
-      color: #ffd7d5;
-      padding: 12px 14px;
-      border-radius: 16px;
-      margin: 10px 0 12px;
-      font-family: var(--mono);
-      font-size: 18px;
-    }
-
-    .controls{
-      margin-top: 8px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      font-family: var(--mono);
-      color: var(--muted);
-      font-size: 13px;
-    }
-    select, button{
-      font-family: var(--mono);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 10px;
-      padding: 8px 10px;
-      cursor: pointer;
-    }
-    button:hover{ background: rgba(255,255,255,.10); }
-
-    @media (max-width: 1100px){
-      .layout{ grid-template-columns: 1fr; }
-      pre{ height: 46vh; }
-      .grid2{ height:auto; }
-      .mini{ height: 24vh; }
-    }
-  </style>
+<style>
+  :root{
+    --bg:#0b0e11; --panel:#11151a; --border:#1f2630;
+    --text:#e6e6e6; --muted:#9aa4b2; --accent:#00ff9c;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:8px; background:var(--bg); color:var(--text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    height:100vh;
+  }
+  header{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:6px 10px; border-bottom:1px solid var(--border); margin-bottom:8px;
+  }
+  header h1{margin:0; font-size:14px; color:var(--accent)}
+  header .meta{font-size:11px; color:var(--muted)}
+  main{
+    display:grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto;
+    gap:8px; height: calc(100vh - 48px);
+  }
+  .panel{
+    background:var(--panel); border:1px solid var(--border);
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+  .panel h2{
+    margin:0; padding:4px 6px; font-size:12px; color:var(--muted);
+    border-bottom:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .badge{font-size:10px; color:var(--muted)}
+  pre{
+    margin:0; padding:6px; flex:1; overflow:auto;
+    white-space:pre-wrap; font-size:13px; line-height:1.25;
+  }
+  .bottom{
+    grid-column: span 2;
+    display:grid; grid-template-columns: 1fr 1fr 1fr;
+    gap:8px; height: 22vh;
+  }
+</style>
 </head>
+
 <body>
-  <header>
-    <h1>Mining NOC</h1>
-    <div class="right">
-      <div class="pill"><span id="dot" class="status-dot"></span><b>Status</b>: <span id="status">loading…</span></div>
-      <div class="pill"><b>Last Block</b>: <span id="blockfound">—</span></div>
-      <div class="pill"><b>Height</b>: <span id="height">—</span></div>
-      <div class="pill"><b>Updated</b>: <span id="updated">—</span></div>
+<header>
+  <h1>NOC Mining Dashboard</h1>
+  <div class="meta" id="meta">Loading…</div>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>Blockwatch — Log <span class="badge" id="src-bw">detecting…</span></h2>
+    <pre id="bw">Loading…</pre>
+  </section>
+
+  <section class="panel">
+    <h2>Walletguard — Log <span class="badge" id="src-wg">detecting…</span></h2>
+    <pre id="wg">Loading…</pre>
+  </section>
+
+  <section class="bottom">
+    <div class="panel">
+      <h2>Last Block Found <span class="badge" id="src-bf">detecting…</span></h2>
+      <pre id="bf">Loading…</pre>
     </div>
-  </header>
-
-  <div id="banner" class="banner"></div>
-
-  <div class="layout">
-    <!-- Left: primary log -->
-    <div class="card">
-      <h2>
-        Blockwatch (bf_log.txt)
-        <span class="hint">auto-tail + auto-scroll</span>
-      </h2>
-      <pre id="bf_log">loading…</pre>
-
-      <div class="controls">
-        <span>Refresh:</span>
-        <select id="interval">
-          <option value="5">5s</option>
-          <option value="10" selected>10s</option>
-          <option value="15">15s</option>
-          <option value="30">30s</option>
-        </select>
-        <span>Lines:</span>
-        <select id="lines">
-          <option value="80">80</option>
-          <option value="120" selected>120</option>
-          <option value="200">200</option>
-          <option value="400">400</option>
-        </select>
-        <button id="pause">Pause</button>
-        <button id="resume" style="display:none;">Resume</button>
-      </div>
+    <div class="panel">
+      <h2>Chain Height <span class="badge" id="src-h">detecting…</span></h2>
+      <pre id="h">Loading…</pre>
     </div>
-
-    <!-- Right: walletguard + summary -->
-    <div class="grid2">
-      <div class="card">
-        <h2>
-          Walletguard (heartbeat.log)
-          <span class="hint">OK / mismatch watch</span>
-        </h2>
-        <pre id="heartbeat_log" class="mini">loading…</pre>
-      </div>
-
-      <div class="card">
-        <h2>
-          Summary
-          <span class="hint">blockfound / height / poolblock</span>
-        </h2>
-        <pre id="summary" class="mini">loading…</pre>
-      </div>
+    <div class="panel">
+      <h2>Status <span class="badge" id="src-s">detecting…</span></h2>
+      <pre id="s">Loading…</pre>
     </div>
-  </div>
+  </section>
+</main>
 
 <script>
-  const endpoints = {
-    bf_log:        "/blockwatch/bf_log.txt",
-    heartbeat_log: "/walletguard/heartbeat.log",
-    blockfound:    "/blockwatch/blockfound.txt",
-    height:        "/blockwatch/height.txt",
-    poolblock:     "/blockwatch/poolblock.txt"
+  // Refresh interval (ms)
+  const REFRESH_MS = 5000;
+
+  // Candidate URL lists (we'll try each in order and use the first that works)
+  // Includes BOTH styles you've used historically:
+  // - flat: /bf_log.txt
+  // - foldered: /blockwatch/bf_log.txt
+  const CANDIDATES = {
+    blockwatchLog: ["bf_log.txt", "blockwatch/bf_log.txt"],
+    walletguardLog: ["heartbeat.log", "walletguard/heartbeat.log"],
+    blockfound: ["blockfound.txt", "blockwatch/blockfound.txt"],
+    height: ["height.txt", "blockwatch/height.txt"],
+    status: ["heartbeat.txt", "walletguard/heartbeat.txt"]
   };
 
-  const el = (id) => document.getElementById(id);
-
-  let paused = false;
-  let timer = null;
-
-  async function fetchText(url) {
-    const res = await fetch(url + "?t=" + Date.now(), { cache: "no-store" });
-    if (!res.ok) throw new Error(`${url} -> HTTP ${res.status}`);
-    return await res.text();
+  async function firstWorkingUrl(urls){
+    for (const u of urls){
+      try{
+        const r = await fetch(u, { cache: "no-store" });
+        if (r.ok) return u;
+      } catch(e) {}
+    }
+    return null;
   }
 
-  function tailLines(text, n) {
-    const lines = text.replace(/\r/g,"").split("\n");
-    return lines.slice(Math.max(0, lines.length - n)).join("\n");
-  }
+  async function loadInto(preId, badgeId, urlList){
+    const pre = document.getElementById(preId);
+    const badge = document.getElementById(badgeId);
 
-  function autoScroll(preEl) {
-    // If user scrolled up, don't yank them back down.
-    const nearBottom = (preEl.scrollTop + preEl.clientHeight) >= (preEl.scrollHeight - 40);
-    if (nearBottom) preEl.scrollTop = preEl.scrollHeight;
-  }
+    // Cache the chosen URL so we don't re-detect every refresh
+    if (!pre.dataset.src){
+      const chosen = await firstWorkingUrl(urlList);
+      pre.dataset.src = chosen || "";
+      badge.textContent = chosen ? chosen : "NOT FOUND";
+    }
 
-  function setStatus(kind, msg) {
-    el("status").textContent = msg;
-    const dot = el("dot");
-    dot.className = "status-dot " + (kind === "good" ? "dot-good" : kind === "warn" ? "dot-warn" : "dot-bad");
-  }
+    const src = pre.dataset.src;
+    if (!src){
+      pre.textContent = "Could not find this file at any known path.\n\nTried:\n- " + urlList.join("\n- ");
+      return;
+    }
 
-  async function refresh() {
-    if (paused) return;
-
-    const nLines = parseInt(el("lines").value, 10);
-
-    try {
-      const [bf, hb, bfnd, h, pb] = await Promise.all([
-        fetchText(endpoints.bf_log),
-        fetchText(endpoints.heartbeat_log),
-        fetchText(endpoints.blockfound),
-        fetchText(endpoints.height),
-        fetchText(endpoints.poolblock)
-      ]);
-
-      el("bf_log").textContent = tailLines(bf, nLines);
-      autoScroll(el("bf_log"));
-
-      el("heartbeat_log").textContent = tailLines(hb, Math.min(nLines, 200));
-      autoScroll(el("heartbeat_log"));
-
-      const bfndTrim = (bfnd || "").trim();
-      const hTrim = (h || "").trim();
-      const pbTrim = (pb || "").trim();
-
-      el("blockfound").textContent = bfndTrim || "—";
-      el("height").textContent = hTrim || "—";
-      el("updated").textContent = new Date().toLocaleString();
-
-      el("summary").textContent =
-        "blockfound.txt:\n" + (bfndTrim || "(empty)") +
-        "\n\nheight.txt:\n" + (hTrim || "(empty)") +
-        "\n\npoolblock.txt:\n" + (pbTrim || "(empty)");
-
-      // Simple health logic:
-      // - If walletguard contains anything besides OK lines, warn.
-      // - If it contains "MISMATCH" or "ERROR", go bad.
-      const hbUpper = hb.toUpperCase();
-      const banner = el("banner");
-      if (hbUpper.includes("MISMATCH") || hbUpper.includes("ERROR") || hbUpper.includes("FAIL")) {
-        setStatus("bad", "ALERT");
-        banner.style.display = "block";
-        banner.textContent = "ALERT: walletguard shows MISMATCH/ERROR/FAIL. Check payout address + scripts immediately.";
-      } else if (!hbUpper.includes("[WALLET-GUARD] OK")) {
-        setStatus("warn", "CHECK");
-        banner.style.display = "block";
-        banner.textContent = "CHECK: walletguard OK heartbeat not detected in recent log tail (might be paused or path changed).";
-      } else {
-        setStatus("good", "OK");
-        banner.style.display = "none";
-        banner.textContent = "";
-      }
-
-    } catch (e) {
-      setStatus("bad", "ERROR");
-      el("updated").textContent = "ERROR: " + e.message;
-      const banner = el("banner");
-      banner.style.display = "block";
-      banner.textContent = "ERROR loading logs: " + e.message;
+    try{
+      const r = await fetch(src, { cache: "no-store" });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const text = await r.text();
+      pre.textContent = text || "(empty)";
+      pre.scrollTop = pre.scrollHeight; // tail-ish behavior
+    } catch(e){
+      pre.textContent = `Error reading ${src}\n${e}`;
     }
   }
 
-  function startTimer() {
-    if (timer) clearInterval(timer);
-    const secs = parseInt(el("interval").value, 10);
-    timer = setInterval(refresh, secs * 1000);
+  function nowLine(){
+    const d = new Date();
+    return `Auto-refresh ${Math.round(REFRESH_MS/1000)}s • ${d.toUTCString()} • Desk Mode (15")`;
   }
 
-  el("interval").addEventListener("change", startTimer);
-  el("lines").addEventListener("change", refresh);
+  async function tick(){
+    document.getElementById("meta").textContent = nowLine();
 
-  el("pause").addEventListener("click", () => {
-    paused = true;
-    el("pause").style.display = "none";
-    el("resume").style.display = "inline-block";
-    setStatus("warn", "PAUSED");
-  });
+    await Promise.all([
+      loadInto("bw","src-bw", CANDIDATES.blockwatchLog),
+      loadInto("wg","src-wg", CANDIDATES.walletguardLog),
+      loadInto("bf","src-bf", CANDIDATES.blockfound),
+      loadInto("h","src-h", CANDIDATES.height),
+      loadInto("s","src-s", CANDIDATES.status),
+    ]);
+  }
 
-  el("resume").addEventListener("click", () => {
-    paused = false;
-    el("resume").style.display = "none";
-    el("pause").style.display = "inline-block";
-    refresh();
-  });
-
-  refresh();
-  startTimer();
+  tick();
+  setInterval(tick, REFRESH_MS);
 </script>
+
 </body>
 </html>
